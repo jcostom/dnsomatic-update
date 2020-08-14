@@ -15,24 +15,24 @@ BACKUPMX = os.getenv('BACKUPMX', 'NOCHG')
 IPADDR_SRC = os.getenv('IPADDR_SRC', 'https://ipv4.icanhazip.com/')
 IPCACHE = "/config/ip.cache.txt"
 
-def constructURL(myip):
+def constructURL(myIP):
     return "&".join(
         ("https://updates.dnsomatic.com/nic/update?hostname={}".format(HOST),
-        "myip={}".format(myip),
+        "myip={}".format(myIP),
         "wildcard={}".format(WILDCARD),
         "mx={}".format(MX),
         "backmx={}".format(BACKUPMX))
     )
 
 def updateDDNS(updateURL, user, passwd):
-    headers = {'User-Agent': 'dnsomatic-update.py v0.1'}
+    headers = {'User-Agent': 'dnsomatic-update.py v0.2'}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
     print(response.text)
 
 def main():
     while True:
         # Grab current external IP
-        myip = requests.get(IPADDR_SRC).text.rstrip('\n')
+        myIP = requests.get(IPADDR_SRC).text.rstrip('\n')
 
         # check to see if cache file exists and take action
         if os.path.exists(IPCACHE):
@@ -40,21 +40,19 @@ def main():
             cachedIP = f.readline()
             f.close()
 
-            if cachedIP == myip:
+            if cachedIP == myIP:
                 print("No change in IP")
             else:
-                # IP changed, Construct Update URL
-                updateURL = constructURL(myip)
+                updateURL = constructURL(myIP)
                 print("IP changed {}".format(updateURL))
                 updateDDNS(updateURL, USERID, PASSWORD)
         else:
             # No cache exists, create file
             f = open(IPCACHE,"w+")
-            f.write(myip)
+            f.write(myIP)
             f.close()
 
-            # Construct Update URL
-            updateURL = constructURL(myip)
+            updateURL = constructURL(myIP)
             print("No cached IP {}".format(updateURL))
             updateDDNS(updateURL, USERID, PASSWORD)
 

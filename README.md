@@ -37,3 +37,10 @@ Pass the following parameters to the container as environment variables (-e swit
 | BACKUPMX | [EMPTY] | NO |
 | IPADDR_SRC | https://ipv4.icanhazip.com/ | NO |
 
+On that last one - the site you're using to determine your external IP address, you've got other options you can employ as well:
+
+* https://api64.ipify.org/ 
+* https://bot.whatismyipaddress.com/
+* https://myip.dnsomatic.com/
+
+You can specify others as well, but they should return your external IP address as the only thing in the response. Pleaty of choices out there, so that stuff's up to you.
