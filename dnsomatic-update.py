@@ -25,7 +25,7 @@ def constructURL(myIP):
     )
 
 def updateDDNS(updateURL, user, passwd):
-    headers = {'User-Agent': 'dnsomatic-update.py v0.2'}
+    headers = {'User-Agent': 'dnsomatic-update.py v0.3'}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
     print(response.text)
 
