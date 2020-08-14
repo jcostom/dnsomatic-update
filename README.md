@@ -1,5 +1,9 @@
 # dnsomatic-update
 
+[![Docker Stars](https://img.shields.io/docker/stars/jcostom/dnsomatic-update.svg)](https://hub.docker.com/r/jcostom/dnsomatic-update/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/jcostom/dnsomatic-update.svg)](https://hub.docker.com/r/jcostom/dnsomatic-update/)
+[![ImageLayers](https://images.microbadger.com/badges/image/jcostom/dnsomatic-update.svg)](https://microbadger.com/#/images/jcostom/dnsomatic-update)
+
 Lightweight DNS-o-Matic Updater in Python.
 
 Why build this? I was having problems with ddclient properly updating DNS-O-Matic, and wanted to rebuild it in Python and containerize the script.
