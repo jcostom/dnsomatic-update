@@ -3,6 +3,7 @@
 [![Docker Stars](https://img.shields.io/docker/stars/jcostom/dnsomatic-update.svg)](https://hub.docker.com/r/jcostom/dnsomatic-update/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jcostom/dnsomatic-update.svg)](https://hub.docker.com/r/jcostom/dnsomatic-update/)
 [![ImageLayers](https://images.microbadger.com/badges/image/jcostom/dnsomatic-update.svg)](https://microbadger.com/#/images/jcostom/dnsomatic-update)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update?ref=badge_shield)
 
 Lightweight DNS-o-Matic Updater in Python.
 
