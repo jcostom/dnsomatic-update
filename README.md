@@ -49,3 +49,7 @@ On that last one - the site you're using to determine your external IP address, 
 * https://myip.dnsomatic.com/
 
 You can specify others as well, but they should return your external IP address as the only thing in the response. Pleaty of choices out there, so that stuff's up to you.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update?ref=badge_large)
