@@ -12,9 +12,11 @@ Why build this? I was having problems with ddclient properly updating DNS-O-Mati
 So, how to use this beast? It's rather simple, really.
 
 ## Pull the image
+
 `docker pull jcostom/dnsomatic-update`
 
 ## Run the container
+
 For example, if you're content to use the defaults, only specifying username & password:
 
 ```bash
@@ -25,9 +27,10 @@ docker run -d \
     -e PASSWORD='YOUR-DNSOMATIC-PASSWORD' \
     jcostom/dnsomatic-update
 ```
+
 If you'd like to more easily view the IP cached by the script, mount a directory as /config inside the container. For example, add `-v /var/docks/dnsomatic:/config` to your container invocation.
 
-## Available parameters:
+## Available parameters
 
 Pass the following parameters to the container as environment variables (-e switch).
 
@@ -35,21 +38,21 @@ Pass the following parameters to the container as environment variables (-e swit
 |---|---|---|
 | USERID | [EMPTY] | YES! |
 | PASSWORD | [EMPTY] | YES! |
-| INTERVAL (in seconds) | 3600 | NO |
+| INTERVAL (in seconds) | 300 | NO |
 | HOST | all.dnsomatic.com | NO |
 | WILDCARD | [EMPTY] | NO |
 | MX | [EMPTY] | NO |
 | BACKUPMX | [EMPTY] | NO |
-| IPADDR_SRC | https://ipv4.icanhazip.com/ | NO |
+| IPADDR_SRC | [https://ipv4.icanhazip.com/](https://ipv4.icanhazip.com/) | NO |
 
 On that last one - the site you're using to determine your external IP address, you've got other options you can employ as well:
 
-* https://api64.ipify.org/ 
-* https://bot.whatismyipaddress.com/
-* https://myip.dnsomatic.com/
+* [https://api64.ipify.org/](https://api64.ipify.org/)
+* [https://bot.whatismyipaddress.com/](https://bot.whatismyipaddress.com/)
+* [https://myip.dnsomatic.com/](https://myip.dnsomatic.com/)
 
 You can specify others as well, but they should return your external IP address as the only thing in the response. Pleaty of choices out there, so that stuff's up to you.
 
-
 ## License
+
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update?ref=badge_large)

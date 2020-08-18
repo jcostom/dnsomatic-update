@@ -7,7 +7,7 @@ import time
 
 USERID = os.getenv('USERID')
 PASSWORD = os.getenv('PASSWORD')
-INTERVAL = os.getenv('INTERVAL', 3600)
+INTERVAL = os.getenv('INTERVAL', 300)
 HOST = os.getenv('HOST', 'all.dnsomatic.com')
 WILDCARD = os.getenv('WILDCARD', 'NOCHG')
 MX = os.getenv('MX', 'NOCHG')
