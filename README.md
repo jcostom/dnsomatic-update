@@ -23,12 +23,13 @@ For example, if you're content to use the defaults, only specifying username & p
 docker run -d \
     --name=dnsomatic \
     --restart=unless-stopped \
+    --user=1000:1000 \
     -e USERID='YOUR-DNSOMATIC-USERNAME' \
     -e PASSWORD='YOUR-DNSOMATIC-PASSWORD' \
     jcostom/dnsomatic-update
 ```
 
-If you'd like to more easily view the IP cached by the script, mount a directory as /config inside the container. For example, add `-v /var/docks/dnsomatic:/config` to your container invocation.
+If you'd like to more easily view the IP cached by the script, mount a directory as /config inside the container. For example, add `-v /var/docks/dnsomatic:/config` to your container invocation. The `--user UID:GID` parameter in starting the container is highly recommended. No point in running the container as root if you don't need to, right? If you do this and map a volume to the local filesystem, just make sure the UID:GID combo has write permission to that directory, otherwise, your IP cache will never be written.
 
 ## Available parameters
 
