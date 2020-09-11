@@ -41,7 +41,7 @@ def updateDDNS(myIP, user, passwd):
 
     headers = {'User-Agent': 'dnsomatic-update.py v0.5'}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
-    print("DNS-O-Matic Response: {}".format(response.text))
+    print(time.strftime("[%d %b %Y %H:%M:%S]", time.localtime()) + " DNS-O-Matic Response: {}".format(response.text))
 
 def main():
     while True:
@@ -55,11 +55,11 @@ def main():
                 print("IP changed to {}".format(myIP))
                 updateDDNS(myIP, USERID, PASSWORD)
             else:
-                print("No change in IP, no action taken.")  
+                print(time.strftime("[%d %b %Y %H:%M:%S]", time.localtime()) + " No change in IP, no action taken.")  
         else:
             # No cache exists, create file
             updateCache(myIP)
-            print("No cached IP, setting to {}".format(myIP))
+            print(time.strftime("[%d %b %Y %H:%M:%S]", time.localtime()) + " No cached IP, setting to {}".format(myIP))
             updateDDNS(myIP, USERID, PASSWORD)
 
         time.sleep(INTERVAL)
