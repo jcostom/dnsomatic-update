@@ -18,4 +18,4 @@ RUN mkdir /app
 COPY ./dnsomatic-update.py /app
 RUN chmod 755 /app/dnsomatic-update.py
 
-ENTRYPOINT [ "/app/dnsomatic-update.py" ]
+ENTRYPOINT [ "python3 -u /app/dnsomatic-update.py" ]

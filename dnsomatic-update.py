@@ -39,7 +39,7 @@ def updateDDNS(myIP, user, passwd):
           "backmx={}".format(BACKUPMX))
         )
 
-    headers = {'User-Agent': 'dnsomatic-update.py v0.4'}
+    headers = {'User-Agent': 'dnsomatic-update.py v0.5'}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
     print(response.text)
 
