@@ -43,7 +43,7 @@ def updateDDNS(myIP, user, passwd):
           "backmx={}".format(BACKUPMX))
         )
 
-    headers = {'User-Agent': 'dnsomatic-update.py v0.9.2-fmf'}
+    headers = {'User-Agent': 'dnsomatic-update.py v0.9.3-fmf'}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
     print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " DNS-O-Matic Response: {}".format(response.text))
     if USEIFTTT:
@@ -56,9 +56,9 @@ def triggerWebHook(newIP):
         "with/key",
         IFTTTKEY)
     )
-    headers = {'User-Agent': 'dnsomatic-update.py v0.9.2-fmf'}
+    headers = {'User-Agent': 'dnsomatic-update.py v0.9.3-fmf'}
     payload = { 'value1': newIP }
-    response = requests.post(webHookURL, headers=headers, date=payload)
+    response = requests.post(webHookURL, headers=headers, data=payload)
     print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " IFTTT Response: {}".format(response.text))
 
 def main():
