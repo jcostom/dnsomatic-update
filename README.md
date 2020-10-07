@@ -26,6 +26,9 @@ docker run -d \
     --user=1000:1000 \
     -e USERID='YOUR-DNSOMATIC-USERNAME' \
     -e PASSWORD='YOUR-DNSOMATIC-PASSWORD' \
+    -e USEIFTTT=1 \
+    -e IFTTTKEY='Your IFTTT Webhook Key' \
+    -e IFTTTWEBHOOK='Your IFTTT Webhook Name' \
     jcostom/dnsomatic-update
 ```
 
@@ -45,6 +48,9 @@ Pass the following parameters to the container as environment variables (-e swit
 | MX | [EMPTY] | NO |
 | BACKUPMX | [EMPTY] | NO |
 | IPADDR_SRC | [https://ipv4.icanhazip.com/](https://ipv4.icanhazip.com/) | NO |
+| USEIFTTT | [EMPTY] | NO |
+| IFTTTKEY | [EMPTY] | NO |
+| IFTTTWEBHOOK | [EMPTY] | NO |  
 
 On that last one - the site you're using to determine your external IP address, you've got other options you can employ as well:
 

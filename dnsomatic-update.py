@@ -16,6 +16,12 @@ IPADDR_SRC = os.getenv('IPADDR_SRC', 'https://ipv4.icanhazip.com/')
 IPCACHE = "/config/ip.cache.txt"
 # IPCACHE = "ip.cache.txt"
 
+USEIFTTT = os.getenv('USEIFTTT')
+IFTTTKEY = os.getenv('IFTTTKEY')
+IFTTTWEBHOOK = os.getenv('IFTTTWEBHOOK')
+
+VER = 'dnsomatic-update.py v0.9.4-fmf'
+
 def ipChanged(myIP):
     f = open(IPCACHE,"r")
     cachedIP = f.readline()
@@ -39,9 +45,23 @@ def updateDDNS(myIP, user, passwd):
           "backmx={}".format(BACKUPMX))
         )
 
-    headers = {'User-Agent': 'dnsomatic-update.py v0.9.1'}
+    headers = {'User-Agent': VER }
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
     print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " DNS-O-Matic Response: {}".format(response.text))
+    if USEIFTTT:
+        triggerWebHook(myIP)
+
+def triggerWebHook(newIP):
+    webHookURL = "/".join(
+        ("https://maker.ifttt.com/trigger",
+        IFTTTWEBHOOK,
+        "with/key",
+        IFTTTKEY)
+    )
+    headers = {'User-Agent': VER }
+    payload = { 'value1': newIP }
+    response = requests.post(webHookURL, headers=headers, data=payload)
+    print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " IFTTT Response: {}".format(response.text))
 
 def main():
     while True:
