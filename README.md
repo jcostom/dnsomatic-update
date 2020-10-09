@@ -29,6 +29,7 @@ docker run -d \
     -e USEIFTTT=1 \
     -e IFTTTKEY='Your IFTTT Webhook Key' \
     -e IFTTTWEBHOOK='Your IFTTT Webhook Name' \
+    -e SITENAME='Home' \
     jcostom/dnsomatic-update
 ```
 
@@ -51,6 +52,7 @@ Pass the following parameters to the container as environment variables (-e swit
 | USEIFTTT | [EMPTY] | NO |
 | IFTTTKEY | [EMPTY] | NO |
 | IFTTTWEBHOOK | [EMPTY] | NO |  
+| SITENAME | [EMPTY] | NO (YES, if USEIFTTT is true) |
 
 On that last one - the site you're using to determine your external IP address, you've got other options you can employ as well:
 
@@ -59,6 +61,10 @@ On that last one - the site you're using to determine your external IP address, 
 * [https://myip.dnsomatic.com/](https://myip.dnsomatic.com/)
 
 You can specify others as well, but they should return your external IP address as the only thing in the response. Pleaty of choices out there, so that stuff's up to you.
+
+## IFTTT Usage
+
+Create a new applet using Webhook as the "If This", then whatever is appropriate for your use case on the "Then That" side. Personally speaking, I generate a Telegram message with new IP info.
 
 ## License
 

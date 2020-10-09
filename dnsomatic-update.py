@@ -19,8 +19,9 @@ IPCACHE = "/config/ip.cache.txt"
 USEIFTTT = os.getenv('USEIFTTT')
 IFTTTKEY = os.getenv('IFTTTKEY')
 IFTTTWEBHOOK = os.getenv('IFTTTWEBHOOK')
+SITENAME = os.getenv('SITENAME')
 
-VER = 'dnsomatic-update.py v1.0'
+VER = 'dnsomatic-update.py v1.1'
 
 def ipChanged(myIP):
     f = open(IPCACHE,"r")
@@ -59,7 +60,7 @@ def triggerWebHook(newIP):
         IFTTTKEY)
     )
     headers = {'User-Agent': VER }
-    payload = { 'value1': newIP }
+    payload = { 'value1': SITENAME, 'value2': newIP }
     response = requests.post(webHookURL, headers=headers, data=payload)
     print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " IFTTT Response: {}".format(response.text))
 
