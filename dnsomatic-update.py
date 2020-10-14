@@ -21,7 +21,7 @@ IFTTTKEY = os.getenv('IFTTTKEY')
 IFTTTWEBHOOK = os.getenv('IFTTTWEBHOOK')
 SITENAME = os.getenv('SITENAME')
 
-VER = 'dnsomatic-update.py v1.1'
+VER = 'dnsomatic-update.py v1.2'
 
 def ipChanged(myIP):
     f = open(IPCACHE,"r")
@@ -48,7 +48,7 @@ def updateDDNS(myIP, user, passwd):
 
     headers = {'User-Agent': VER }
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
-    print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " DNS-O-Matic Response: {}".format(response.text))
+    writeLogEntry('DNS-O-Matic Response', response.text)
     if USEIFTTT:
         triggerWebHook(myIP)
 
@@ -62,7 +62,10 @@ def triggerWebHook(newIP):
     headers = {'User-Agent': VER }
     payload = { 'value1': SITENAME, 'value2': newIP }
     response = requests.post(webHookURL, headers=headers, data=payload)
-    print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " IFTTT Response: {}".format(response.text))
+    writeLogEntry('IFTTT Response', response.text)
+
+def writeLogEntry(message, status):
+    print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " {}: {}".format(message, status))
 
 def main():
     while True:
@@ -73,14 +76,14 @@ def main():
         if os.path.exists(IPCACHE):
             if ipChanged(myIP):
                 updateCache(myIP)
-                print("IP changed to {}".format(myIP))
+                writeLogEntry('IP changed to', myIP)
                 updateDDNS(myIP, USERID, PASSWORD)
             else:
-                print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " No change in IP, no action taken.")  
+                writeLogEntry('No change in IP, no action taken', '') 
         else:
             # No cache exists, create file
             updateCache(myIP)
-            print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " No cached IP, setting to {}".format(myIP))
+            writeLogEntry('No cached IP, setting to', myIP)
             updateDDNS(myIP, USERID, PASSWORD)
 
         time.sleep(INTERVAL)
