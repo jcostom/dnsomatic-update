@@ -7,7 +7,7 @@
 
 Lightweight DNS-o-Matic Updater in Python.
 
-Why build this? I was having problems with ddclient properly updating DNS-O-Matic, and wanted to rebuild it in Python and containerize the script.
+Why build this? I was having problems with ddclient properly updating DNS-O-Matic, and wanted to rebuild it in Python and containerize the script. Now with automatic vulnerability scanning from Docker Hub integrated!
 
 So, how to use this beast? It's rather simple, really.
 
