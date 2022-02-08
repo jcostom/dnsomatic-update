@@ -13,8 +13,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 VOLUME "/config"
 
 RUN \
-    apt update \
-    && apt -yq install python3-requests 
+    pip3 install requests
 
 RUN mkdir /app
 COPY ./dnsomatic-update.py /app
