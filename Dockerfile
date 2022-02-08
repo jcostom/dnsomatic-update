@@ -1,4 +1,4 @@
-FROM alpine:3.15
+FROM python:slim
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -13,10 +13,8 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 VOLUME "/config"
 
 RUN \
-    apk add --no-cache tzdata py3-requests \
-    && rm -rf /var/cache/apk/* \
-    && cp /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone 
+    apt update \
+    && apt -yq install python3-requests 
 
 RUN mkdir /app
 COPY ./dnsomatic-update.py /app
