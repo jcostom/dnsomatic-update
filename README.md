@@ -30,6 +30,7 @@ docker run -d \
     -e IFTTTKEY='Your IFTTT Webhook Key' \
     -e IFTTTWEBHOOK='Your IFTTT Webhook Name' \
     -e SITENAME='Home' \
+    -e TZ='America/New_York' \
     jcostom/dnsomatic-update
 ```
 
