@@ -21,7 +21,7 @@ IFTTTKEY = os.getenv('IFTTTKEY')
 IFTTTWEBHOOK = os.getenv('IFTTTWEBHOOK')
 SITENAME = os.getenv('SITENAME')
 
-VER = 'dnsomatic-update.py v1.2'
+VER = 'dnsomatic-update.py v1.7'
 
 def ipChanged(myIP):
     f = open(IPCACHE,"r")
