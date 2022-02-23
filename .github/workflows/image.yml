@@ -5,8 +5,8 @@ on:
     branches: 
       - 'main'
     tags:
-      - 'v*.*'
-      - 'v*.*.*'
+      - '*.*'
+      - '*.*.*'
 
 jobs:
   build:
