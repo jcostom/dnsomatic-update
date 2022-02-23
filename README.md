@@ -1,10 +1,5 @@
 # dnsomatic-update
 
-[![Docker Stars](https://img.shields.io/docker/stars/jcostom/dnsomatic-update.svg)](https://hub.docker.com/r/jcostom/dnsomatic-update/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/jcostom/dnsomatic-update.svg)](https://hub.docker.com/r/jcostom/dnsomatic-update/)
-[![ImageLayers](https://images.microbadger.com/badges/image/jcostom/dnsomatic-update.svg)](https://microbadger.com/#/images/jcostom/dnsomatic-update)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update?ref=badge_shield)
-
 Lightweight DNS-o-Matic Updater in Python.
 
 Why build this? I was having problems with ddclient properly updating DNS-O-Matic, and wanted to rebuild it in Python and containerize the script. Now with automatic vulnerability scanning from Docker Hub integrated!
@@ -67,6 +62,3 @@ You can specify others as well, but they should return your external IP address 
 
 Create a new applet using Webhook as the "If This", then whatever is appropriate for your use case on the "Then That" side. Personally speaking, I generate a Telegram message with new IP info.
 
-## License
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjcostom%2Fdnsomatic-update?ref=badge_large)
