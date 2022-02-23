@@ -35,7 +35,7 @@ jobs:
             jcostom/dnsomatic-update
           tags: |
             type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'main') }}
-            type=ref,event=tag
+            type=semver,pattern={{version}}
       - name: Build and push
         uses: docker/build-push-action@v2.9.0
         with:
