@@ -4,7 +4,7 @@ ENV TZ=America/New_York
 
 VOLUME "/config"
 
-RUN pip3 install requests
+RUN pip install requests && pip cache purge
 
 RUN mkdir /app
 COPY ./dnsomatic-update.py /app
