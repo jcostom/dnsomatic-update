@@ -21,10 +21,11 @@ IFTTTKEY = os.getenv('IFTTTKEY')
 IFTTTWEBHOOK = os.getenv('IFTTTWEBHOOK')
 SITENAME = os.getenv('SITENAME')
 
-VER = 'dnsomatic-update.py v1.7'
+VER = 'dnsomatic-update.py v2.1'
+
 
 def ipChanged(myIP):
-    f = open(IPCACHE,"r")
+    f = open(IPCACHE, "r")
     cachedIP = f.readline()
     f.close()
     if cachedIP == myIP:
@@ -32,40 +33,46 @@ def ipChanged(myIP):
     else:
         return True
 
+
 def updateCache(myIP):
-    f = open(IPCACHE,"w+")
+    f = open(IPCACHE, "w+")
     f.write(myIP)
     f.close()
 
+
 def updateDDNS(myIP, user, passwd):
     updateURL = "&".join(
-        ( "https://updates.dnsomatic.com/nic/update?hostname={}".format(HOST),
-          "myip={}".format(myIP),
-          "wildcard={}".format(WILDCARD),
-          "mx={}".format(MX),
-          "backmx={}".format(BACKUPMX))
+        ("https://updates.dnsomatic.com/nic/update?hostname={}".format(HOST),
+         "myip={}".format(myIP),
+         "wildcard={}".format(WILDCARD),
+         "mx={}".format(MX),
+         "backmx={}".format(BACKUPMX))
         )
 
-    headers = {'User-Agent': VER }
+    headers = {'User-Agent': VER}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
     writeLogEntry('DNS-O-Matic Response', response.text)
     if USEIFTTT:
         triggerWebHook(myIP)
 
+
 def triggerWebHook(newIP):
     webHookURL = "/".join(
         ("https://maker.ifttt.com/trigger",
-        IFTTTWEBHOOK,
-        "with/key",
-        IFTTTKEY)
+         IFTTTWEBHOOK,
+         "with/key",
+         IFTTTKEY)
     )
-    headers = {'User-Agent': VER }
-    payload = { 'value1': SITENAME, 'value2': newIP }
+    headers = {'User-Agent': VER}
+    payload = {'value1': SITENAME, 'value2': newIP}
     response = requests.post(webHookURL, headers=headers, data=payload)
     writeLogEntry('IFTTT Response', response.text)
 
+
 def writeLogEntry(message, status):
-    print(time.strftime("[%d %b %Y %H:%M:%S %Z]", time.localtime()) + " {}: {}".format(message, status))
+    print(time.strftime("[%d %b %Y %H:%M:%S %Z]",
+          time.localtime()) + " {}: {}".format(message, status))
+
 
 def main():
     while True:
@@ -79,7 +86,7 @@ def main():
                 writeLogEntry('IP changed to', myIP)
                 updateDDNS(myIP, USERID, PASSWORD)
             else:
-                writeLogEntry('No change in IP, no action taken', '') 
+                writeLogEntry('No change in IP, no action taken', '')
         else:
             # No cache exists, create file
             updateCache(myIP)
@@ -87,6 +94,7 @@ def main():
             updateDDNS(myIP, USERID, PASSWORD)
 
         time.sleep(INTERVAL)
-    
+
+
 if __name__ == "__main__":
     main()
