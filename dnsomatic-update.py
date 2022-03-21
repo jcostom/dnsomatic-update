@@ -3,6 +3,7 @@
 import os
 import os.path
 import requests
+import telegram
 import time
 
 USERID = os.getenv('USERID')
@@ -13,15 +14,16 @@ WILDCARD = os.getenv('WILDCARD', 'NOCHG')
 MX = os.getenv('MX', 'NOCHG')
 BACKUPMX = os.getenv('BACKUPMX', 'NOCHG')
 IPADDR_SRC = os.getenv('IPADDR_SRC', 'https://ipv4.icanhazip.com/')
-IPCACHE = "/config/ip.cache.txt"
-# IPCACHE = "ip.cache.txt"
 
-USEIFTTT = os.getenv('USEIFTTT')
-IFTTTKEY = os.getenv('IFTTTKEY')
-IFTTTWEBHOOK = os.getenv('IFTTTWEBHOOK')
+USETELEGRAM = os.getenv('USETELEGRAM')
+CHATID = int(os.getenv('CHATID'))
+MYTOKEN = os.getenv('MYTOKEN')
 SITENAME = os.getenv('SITENAME')
 
-VER = 'dnsomatic-update.py v2.4.1'
+IPCACHE = "/config/ip.cache.txt"
+# IPCACHE = "ip.cache.txt"
+VER = "3.0"
+USER_AGENT = "dnsomatic-update.py/" + VER
 
 
 def ipChanged(myIP):
@@ -49,24 +51,21 @@ def updateDDNS(myIP, user, passwd):
          "backmx={}".format(BACKUPMX))
         )
 
-    headers = {'User-Agent': VER}
+    headers = {'User-Agent': USER_AGENT}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
     writeLogEntry('DNS-O-Matic Response', response.text)
-    if USEIFTTT:
-        triggerWebHook(myIP)
+    if USETELEGRAM == "1":
+        notificationText = "".join(
+            ("[", SITENAME, "] WAN IP Changed @ ",
+             time.strftime("%B %d, %Y at %H:%M. New IP == "), myIP)
+        )
+        sendNotification(notificationText, CHATID, MYTOKEN)
 
 
-def triggerWebHook(newIP):
-    webHookURL = "/".join(
-        ("https://maker.ifttt.com/trigger",
-         IFTTTWEBHOOK,
-         "with/key",
-         IFTTTKEY)
-    )
-    headers = {'User-Agent': VER}
-    payload = {'value1': SITENAME, 'value2': newIP}
-    response = requests.post(webHookURL, headers=headers, data=payload)
-    writeLogEntry('IFTTT Response', response.text)
+def sendNotification(msg, chat_id, token):
+    bot = telegram.Bot(token=token)
+    bot.sendMessage(chat_id=chat_id, text=msg)
+    writeLogEntry("Telegram Group Message Sent", "")
 
 
 def writeLogEntry(message, status):
