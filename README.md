@@ -21,9 +21,9 @@ docker run -d \
     --user=1000:1000 \
     -e USERID='YOUR-DNSOMATIC-USERNAME' \
     -e PASSWORD='YOUR-DNSOMATIC-PASSWORD' \
-    -e USEIFTTT=1 \
-    -e IFTTTKEY='Your IFTTT Webhook Key' \
-    -e IFTTTWEBHOOK='Your IFTTT Webhook Name' \
+    -e USETELEGRAM=1 \
+    -e CHATID='Your Telegram Chat ID' \
+    -e MYTOKEN='Your Telegram Bot Token' \
     -e SITENAME='Home' \
     -e TZ='America/New_York' \
     jcostom/dnsomatic-update
@@ -45,10 +45,10 @@ Pass the following parameters to the container as environment variables (-e swit
 | MX | [EMPTY] | NO |
 | BACKUPMX | [EMPTY] | NO |
 | IPADDR_SRC | [https://ipv4.icanhazip.com/](https://ipv4.icanhazip.com/) | NO |
-| USEIFTTT | [EMPTY] | NO |
-| IFTTTKEY | [EMPTY] | NO |
-| IFTTTWEBHOOK | [EMPTY] | NO |  
-| SITENAME | [EMPTY] | NO (YES, if USEIFTTT is true) |
+| USETELEGRAM | [EMPTY] | NO |
+| CHATID | [EMPTY] | NO (YES, if USETELEGRAM is true) |
+| MYTOKEN | [EMPTY] | NO (YES, if USETELEGRAM is true) |  
+| SITENAME | [EMPTY] | NO (YES, if USETELEGRAM is true) |
 
 On that last one - the site you're using to determine your external IP address, you've got other options you can employ as well:
 
@@ -58,7 +58,6 @@ On that last one - the site you're using to determine your external IP address, 
 
 You can specify others as well, but they should return your external IP address as the only thing in the response. Pleaty of choices out there, so that stuff's up to you.
 
-## IFTTT Usage
+## Telegram Usage
 
-Create a new applet using Webhook as the "If This", then whatever is appropriate for your use case on the "Then That" side. Personally speaking, I generate a Telegram message with new IP info.
-
+Create a Telegram Bot in the usual manner, setup a group or secret chat, find the chat id and plug the appropriate values in here if you'd like to use that. There are loads of guides online that tell you how to do that, so I won't repeat that "howto" here.
