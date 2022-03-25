@@ -15,14 +15,14 @@ MX = os.getenv('MX', 'NOCHG')
 BACKUPMX = os.getenv('BACKUPMX', 'NOCHG')
 IPADDR_SRC = os.getenv('IPADDR_SRC', 'https://ipv4.icanhazip.com/')
 
-USETELEGRAM = os.getenv('USETELEGRAM')
-CHATID = int(os.getenv('CHATID'))
-MYTOKEN = os.getenv('MYTOKEN')
-SITENAME = os.getenv('SITENAME')
+USETELEGRAM = os.getenv('USETELEGRAM', 0)
+CHATID = int(os.getenv('CHATID', 0))
+MYTOKEN = os.getenv('MYTOKEN', 'none')
+SITENAME = os.getenv('SITENAME', 'mysite')
 
 IPCACHE = "/config/ip.cache.txt"
 # IPCACHE = "ip.cache.txt"
-VER = "3.0"
+VER = "3.0.1"
 USER_AGENT = "dnsomatic-update.py/" + VER
 
 
