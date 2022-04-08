@@ -4,7 +4,7 @@ import os
 import os.path
 import requests
 import telegram
-import time
+from time import strftime, localtime, sleep
 
 USERID = os.getenv('USERID')
 PASSWORD = os.getenv('PASSWORD')
@@ -22,7 +22,7 @@ SITENAME = os.getenv('SITENAME', 'mysite')
 
 IPCACHE = "/config/ip.cache.txt"
 # IPCACHE = "ip.cache.txt"
-VER = "3.0.1"
+VER = "3.0.2"
 USER_AGENT = "dnsomatic-update.py/" + VER
 
 
@@ -57,7 +57,7 @@ def updateDDNS(myIP, user, passwd):
     if USETELEGRAM == "1":
         notificationText = "".join(
             ("[", SITENAME, "] WAN IP Changed @ ",
-             time.strftime("%B %d, %Y at %H:%M. New IP == "), myIP)
+             strftime("%B %d, %Y at %H:%M. New IP == "), myIP)
         )
         sendNotification(notificationText, CHATID, MYTOKEN)
 
@@ -69,8 +69,8 @@ def sendNotification(msg, chat_id, token):
 
 
 def writeLogEntry(message, status):
-    print(time.strftime("[%d %b %Y %H:%M:%S %Z]",
-          time.localtime()) + " {}: {}".format(message, status))
+    print("{} {}: {}".format(strftime("[%d %b %Y %H:%M:%S %Z]",
+                             localtime()), message, status))
 
 
 def main():
@@ -92,7 +92,7 @@ def main():
             writeLogEntry('No cached IP, setting to', myIP)
             updateDDNS(myIP, USERID, PASSWORD)
 
-        time.sleep(INTERVAL)
+        sleep(INTERVAL)
 
 
 if __name__ == "__main__":
