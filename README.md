@@ -2,7 +2,7 @@
 
 Lightweight DNS-o-Matic Updater in Python.
 
-Why build this? I was having problems with ddclient properly updating DNS-O-Matic, and wanted to rebuild it in Python and containerize the script. Now with automatic vulnerability scanning from Docker Hub integrated!
+Why build this? I was having problems with ddclient properly updating DNS-O-Matic, and wanted to rebuild it in Python and containerize the script.
 
 So, how to use this beast? It's rather simple, really.
 
@@ -49,8 +49,11 @@ Pass the following parameters to the container as environment variables (-e swit
 | CHATID | 0 | NO (YES, if USETELEGRAM is true) |
 | MYTOKEN | none | NO (YES, if USETELEGRAM is true) |  
 | SITENAME | mysite | NO (YES, if USETELEGRAM is true) |
+| DEBUG | 0 | NO |
 
-On that last one - the site you're using to determine your external IP address, you've got other options you can employ as well:
+Having trouble? Set DEBUG=1 and recreate the container. Check the standard container logs for debugging info. Just the normal `docker logs containername` sort of logs.
+
+On IPADDR_SRC - the site you're using to determine your external IP address, you've got other options you can employ as well:
 
 * [https://api64.ipify.org/](https://api64.ipify.org/)
 * [https://bot.whatismyipaddress.com/](https://bot.whatismyipaddress.com/)

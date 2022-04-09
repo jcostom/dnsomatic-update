@@ -2,9 +2,10 @@
 
 import os
 import os.path
+import logging
 import requests
 import telegram
-from time import strftime, localtime, sleep
+from time import strftime, sleep
 
 USERID = os.getenv('USERID')
 PASSWORD = os.getenv('PASSWORD')
@@ -15,31 +16,45 @@ MX = os.getenv('MX', 'NOCHG')
 BACKUPMX = os.getenv('BACKUPMX', 'NOCHG')
 IPADDR_SRC = os.getenv('IPADDR_SRC', 'https://ipv4.icanhazip.com/')
 
-USETELEGRAM = os.getenv('USETELEGRAM', 0)
+USETELEGRAM = int(os.getenv('USETELEGRAM', 0))
 CHATID = int(os.getenv('CHATID', 0))
 MYTOKEN = os.getenv('MYTOKEN', 'none')
 SITENAME = os.getenv('SITENAME', 'mysite')
+DEBUG = int(os.getenv('DEBUG', 0))
 
 IPCACHE = "/config/ip.cache.txt"
-# IPCACHE = "ip.cache.txt"
-VER = "3.0.2"
-USER_AGENT = "dnsomatic-update.py/" + VER
+VER = "3.1"
+USER_AGENT = "/".join(['dnsomatic-update.py', VER])
+
+# Setup logger
+logger = logging.getLogger()
+ch = logging.StreamHandler()
+if DEBUG:
+    logger.setLevel(logging.DEBUG)
+    ch.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)
+    ch.setLevel(logging.INFO)
+
+formatter = logging.Formatter('[%(levelname)s] %(asctime)s %(message)s',
+                              datefmt='[%d %b %Y %H:%M:%S %Z]')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
-def ipChanged(myIP):
-    f = open(IPCACHE, "r")
-    cachedIP = f.readline()
-    f.close()
-    if cachedIP == myIP:
-        return False
-    else:
-        return True
+def ipChanged(ip):
+    with open(IPCACHE, "r") as f:
+        cachedIP = f.read()
+        if cachedIP == ip:
+            return False
+        else:
+            return True
 
 
-def updateCache(myIP):
-    f = open(IPCACHE, "w+")
-    f.write(myIP)
-    f.close()
+def updateCache(ip):
+    with open(IPCACHE, "w+") as f:
+        f.write(ip)
+    return 0
 
 
 def updateDDNS(myIP, user, passwd):
@@ -53,8 +68,8 @@ def updateDDNS(myIP, user, passwd):
 
     headers = {'User-Agent': USER_AGENT}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
-    writeLogEntry('DNS-O-Matic Response', response.text)
-    if USETELEGRAM == "1":
+    logger.info('DNS-O-Matic Response: {}'.format(response.text))
+    if USETELEGRAM:
         notificationText = "".join(
             ("[", SITENAME, "] WAN IP Changed @ ",
              strftime("%B %d, %Y at %H:%M. New IP == "), myIP)
@@ -65,12 +80,7 @@ def updateDDNS(myIP, user, passwd):
 def sendNotification(msg, chat_id, token):
     bot = telegram.Bot(token=token)
     bot.sendMessage(chat_id=chat_id, text=msg)
-    writeLogEntry("Telegram Group Message Sent", "")
-
-
-def writeLogEntry(message, status):
-    print("{} {}: {}".format(strftime("[%d %b %Y %H:%M:%S %Z]",
-                             localtime()), message, status))
+    logger.info('Telegram Group Message Sent')
 
 
 def main():
@@ -82,14 +92,14 @@ def main():
         if os.path.exists(IPCACHE):
             if ipChanged(myIP):
                 updateCache(myIP)
-                writeLogEntry('IP changed to', myIP)
+                logger.info("IP changed to {}".format(myIP))
                 updateDDNS(myIP, USERID, PASSWORD)
             else:
-                writeLogEntry('No change in IP, no action taken', '')
+                logger.info('No change in IP, no action taken')
         else:
             # No cache exists, create file
             updateCache(myIP)
-            writeLogEntry('No cached IP, setting to', myIP)
+            logger.info("No cached IP, setting to {}".format(myIP))
             updateDDNS(myIP, USERID, PASSWORD)
 
         sleep(INTERVAL)
