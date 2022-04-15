@@ -23,7 +23,7 @@ SITENAME = os.getenv('SITENAME', 'mysite')
 DEBUG = int(os.getenv('DEBUG', 0))
 
 IPCACHE = "/config/ip.cache.txt"
-VER = "3.1"
+VER = "3.2"
 USER_AGENT = "/".join(['dnsomatic-update.py', VER])
 
 # Setup logger
@@ -59,16 +59,16 @@ def updateCache(ip):
 
 def updateDDNS(myIP, user, passwd):
     updateURL = "&".join(
-        ("https://updates.dnsomatic.com/nic/update?hostname={}".format(HOST),
-         "myip={}".format(myIP),
-         "wildcard={}".format(WILDCARD),
-         "mx={}".format(MX),
-         "backmx={}".format(BACKUPMX))
+        (f"https://updates.dnsomatic.com/nic/update?hostname={HOST}",
+         f"myip={myIP}",
+         f"wildcard={WILDCARD}",
+         f"mx={MX}",
+         f"backmx={BACKUPMX}")
         )
 
     headers = {'User-Agent': USER_AGENT}
     response = requests.get(updateURL, headers=headers, auth=(user, passwd))
-    logger.info('DNS-O-Matic Response: {}'.format(response.text))
+    logger.info(f"DNS-O-Matic Response: {response.text}")
     if USETELEGRAM:
         notificationText = "".join(
             ("[", SITENAME, "] WAN IP Changed @ ",
@@ -92,14 +92,14 @@ def main():
         if os.path.exists(IPCACHE):
             if ipChanged(myIP):
                 updateCache(myIP)
-                logger.info("IP changed to {}".format(myIP))
+                logger.info(f"IP changed to {myIP}")
                 updateDDNS(myIP, USERID, PASSWORD)
             else:
                 logger.info('No change in IP, no action taken')
         else:
             # No cache exists, create file
             updateCache(myIP)
-            logger.info("No cached IP, setting to {}".format(myIP))
+            logger.info(f"No cached IP, setting to {myIP}")
             updateDDNS(myIP, USERID, PASSWORD)
 
         sleep(INTERVAL)
