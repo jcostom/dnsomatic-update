@@ -23,8 +23,8 @@ SITENAME = os.getenv('SITENAME', 'mysite')
 DEBUG = int(os.getenv('DEBUG', 0))
 
 IPCACHE = "/config/ip.cache.txt"
-VER = "3.2"
-USER_AGENT = "/".join(['dnsomatic-update.py', VER])
+VER = "3.3"
+USER_AGENT = f"dnsomatic-update.py/{VER}"
 
 # Setup logger
 logger = logging.getLogger()
@@ -42,65 +42,65 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-def ipChanged(ip):
+def ip_changed(ip: str) -> bool:
     with open(IPCACHE, "r") as f:
-        cachedIP = f.read()
-        if cachedIP == ip:
+        cached_ip = f.read()
+        if cached_ip == ip:
             return False
         else:
             return True
 
 
-def updateCache(ip):
+def update_cache(ip: str) -> int:
     with open(IPCACHE, "w+") as f:
         f.write(ip)
     return 0
 
 
-def updateDDNS(myIP, user, passwd):
-    updateURL = "&".join(
-        (f"https://updates.dnsomatic.com/nic/update?hostname={HOST}",
-         f"myip={myIP}",
-         f"wildcard={WILDCARD}",
-         f"mx={MX}",
-         f"backmx={BACKUPMX}")
-        )
-
-    headers = {'User-Agent': USER_AGENT}
-    response = requests.get(updateURL, headers=headers, auth=(user, passwd))
-    logger.info(f"DNS-O-Matic Response: {response.text}")
-    if USETELEGRAM:
-        notificationText = "".join(
-            ("[", SITENAME, "] WAN IP Changed @ ",
-             strftime("%B %d, %Y at %H:%M. New IP == "), myIP)
-        )
-        sendNotification(notificationText, CHATID, MYTOKEN)
-
-
-def sendNotification(msg, chat_id, token):
+def send_notification(msg: str, chat_id: int, token: str) -> None:
     bot = telegram.Bot(token=token)
     bot.sendMessage(chat_id=chat_id, text=msg)
     logger.info('Telegram Group Message Sent')
 
 
+def send_update(ip: str, user: str, passwd: str) -> None:
+    update_url = "&".join(
+        [f"https://updates.dnsomatic.com/nic/update?hostname={HOST}",
+         f"myip={ip}",
+         f"wildcard={WILDCARD}",
+         f"mx={MX}",
+         f"backmx={BACKUPMX}"]
+        )
+
+    headers = {'User-Agent': USER_AGENT}
+    response = requests.get(update_url, headers=headers, auth=(user, passwd))
+    logger.info(f"DNS-O-Matic Response: {response.text}")
+    if USETELEGRAM:
+        notification_text = "".join(
+            ("[", SITENAME, "] WAN IP Changed @ ",
+             strftime("%B %d, %Y at %H:%M. New IP == "), ip)
+        )
+        send_notification(notification_text, CHATID, MYTOKEN)
+
+
 def main():
     while True:
         # Grab current external IP
-        myIP = requests.get(IPADDR_SRC).text.rstrip('\n')
+        current_ip = requests.get(IPADDR_SRC).text.rstrip('\n')
 
         # check to see if cache file exists and take action
         if os.path.exists(IPCACHE):
-            if ipChanged(myIP):
-                updateCache(myIP)
-                logger.info(f"IP changed to {myIP}")
-                updateDDNS(myIP, USERID, PASSWORD)
+            if ip_changed(current_ip):
+                update_cache(current_ip)
+                logger.info(f"IP changed to {current_ip}")
+                send_update(current_ip, USERID, PASSWORD)
             else:
                 logger.info('No change in IP, no action taken')
         else:
             # No cache exists, create file
-            updateCache(myIP)
-            logger.info(f"No cached IP, setting to {myIP}")
-            updateDDNS(myIP, USERID, PASSWORD)
+            update_cache(current_ip)
+            logger.info(f"No cached IP, setting to {current_ip}")
+            send_update(current_ip, USERID, PASSWORD)
 
         sleep(INTERVAL)
 
