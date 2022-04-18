@@ -23,7 +23,7 @@ SITENAME = os.getenv('SITENAME', 'mysite')
 DEBUG = int(os.getenv('DEBUG', 0))
 
 IPCACHE = "/config/ip.cache.txt"
-VER = "3.3.3"
+VER = "3.3.4"
 USER_AGENT = f"dnsomatic-update.py/{VER}"
 
 # Setup logger
