@@ -1,8 +1,10 @@
 name: Delete old container images
 
 on:
-  schedule:
-    - cron: '20 22 * * *'  # 02:15
+  push:
+    tags:
+      - '*.*'
+      - '*.*.*'
 
 jobs:
   clean-ghcr:
