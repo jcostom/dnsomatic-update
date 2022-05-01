@@ -7,6 +7,8 @@ import requests
 import telegram
 from time import strftime, sleep
 
+# --- To be passed in to container ---
+# mandatory vars
 USERID = os.getenv('USERID')
 PASSWORD = os.getenv('PASSWORD')
 INTERVAL = os.getenv('INTERVAL', 300)
@@ -15,15 +17,16 @@ WILDCARD = os.getenv('WILDCARD', 'NOCHG')
 MX = os.getenv('MX', 'NOCHG')
 BACKUPMX = os.getenv('BACKUPMX', 'NOCHG')
 IPADDR_SRC = os.getenv('IPADDR_SRC', 'https://ipv4.icanhazip.com/')
-
+# optional vars
 USETELEGRAM = int(os.getenv('USETELEGRAM', 0))
 CHATID = int(os.getenv('CHATID', 0))
 MYTOKEN = os.getenv('MYTOKEN', 'none')
 SITENAME = os.getenv('SITENAME', 'mysite')
 DEBUG = int(os.getenv('DEBUG', 0))
 
+# --- Globals ---
 IPCACHE = "/config/ip.cache.txt"
-VER = "3.4.1"
+VER = "3.4.2"
 USER_AGENT = f"dnsomatic-update.py/{VER}"
 
 # Setup logger
@@ -83,7 +86,7 @@ def send_update(ip: str, user: str, passwd: str) -> None:
         send_notification(notification_text, CHATID, MYTOKEN)
 
 
-def main():
+def main() -> None:
     while True:
         # Grab current external IP
         current_ip = requests.get(IPADDR_SRC).text.rstrip('\n')
