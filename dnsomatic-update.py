@@ -17,6 +17,7 @@ WILDCARD = os.getenv('WILDCARD', 'NOCHG')
 MX = os.getenv('MX', 'NOCHG')
 BACKUPMX = os.getenv('BACKUPMX', 'NOCHG')
 IPADDR_SRC = os.getenv('IPADDR_SRC', 'https://ipv4.icanhazip.com/')
+
 # optional vars
 USETELEGRAM = int(os.getenv('USETELEGRAM', 0))
 CHATID = int(os.getenv('CHATID', 0))
@@ -26,7 +27,7 @@ DEBUG = int(os.getenv('DEBUG', 0))
 
 # --- Globals ---
 IPCACHE = "/config/ip.cache.txt"
-VER = "3.4.2"
+VER = "3.4.3"
 USER_AGENT = f"dnsomatic-update.py/{VER}"
 
 # Setup logger
@@ -67,22 +68,13 @@ def send_notification(msg: str, chat_id: int, token: str) -> None:
 
 
 def send_update(ip: str, user: str, passwd: str) -> None:
-    update_url = "&".join(
-        [f"https://updates.dnsomatic.com/nic/update?hostname={HOST}",
-         f"myip={ip}",
-         f"wildcard={WILDCARD}",
-         f"mx={MX}",
-         f"backmx={BACKUPMX}"]
-        )
-
+    update_url = f"https://updates.dnsomatic.com/nic/update?hostname={HOST}&myip={ip}&wildcard={WILDCARD}&mx={MX}&backmx={BACKUPMX}"  # noqa E501
     headers = {'User-Agent': USER_AGENT}
     response = requests.get(update_url, headers=headers, auth=(user, passwd))
     logger.info(f"DNS-O-Matic Response: {response.text}")
     if USETELEGRAM:
-        notification_text = "".join(
-            ("[", SITENAME, "] WAN IP Changed @ ",
-             strftime("%B %d, %Y at %H:%M. New IP == "), ip)
-        )
+        now = strftime("%B %d, %Y at %H:%M")
+        notification_text = f"[{SITENAME}] WAN IP changed @ {now}. New IP == {ip}."  # noqa E501
         send_notification(notification_text, CHATID, MYTOKEN)
 
 
