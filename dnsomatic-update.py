@@ -11,7 +11,7 @@ from time import strftime, sleep
 # mandatory vars
 USERID = os.getenv('USERID')
 PASSWORD = os.getenv('PASSWORD')
-INTERVAL = os.getenv('INTERVAL', 300)
+INTERVAL = int(os.getenv('INTERVAL', 300))
 HOST = os.getenv('HOST', 'all.dnsomatic.com')
 WILDCARD = os.getenv('WILDCARD', 'NOCHG')
 MX = os.getenv('MX', 'NOCHG')
@@ -27,7 +27,7 @@ DEBUG = int(os.getenv('DEBUG', 0))
 
 # --- Globals ---
 IPCACHE = "/config/ip.cache.txt"
-VER = "3.4.4"
+VER = "3.4.5"
 USER_AGENT = f"dnsomatic-update.py/{VER}"
 
 # Setup logger
