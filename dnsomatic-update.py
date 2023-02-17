@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import asyncio
 import os
 import os.path
 import logging
@@ -27,7 +28,7 @@ DEBUG = int(os.getenv('DEBUG', 0))
 
 # --- Globals ---
 IPCACHE = "/config/ip.cache.txt"
-VER = "3.4.9"
+VER = "3.5"
 USER_AGENT = f"dnsomatic-update.py/{VER}"
 
 # Setup logger
@@ -61,9 +62,9 @@ def update_cache(ip: str) -> int:
     return 0
 
 
-def send_notification(msg: str, chat_id: int, token: str) -> None:
+async def send_notification(msg: str, chat_id: int, token: str) -> None:
     bot = telegram.Bot(token=token)
-    bot.sendMessage(chat_id=chat_id, text=msg)
+    await bot.send_message(chat_id=chat_id, text=msg)
     logger.info('Telegram Group Message Sent')
 
 
@@ -75,7 +76,7 @@ def send_update(ip: str, user: str, passwd: str) -> None:
     if USETELEGRAM:
         now = strftime("%B %d, %Y at %H:%M")
         notification_text = f"[{SITENAME}] WAN IP changed @ {now}. New IP == {ip}."  # noqa E501
-        send_notification(notification_text, CHATID, MYTOKEN)
+        asyncio.run(send_notification(notification_text, CHATID, MYTOKEN))
 
 
 def main() -> None:
