@@ -28,7 +28,7 @@ DEBUG = int(os.getenv('DEBUG', 0))
 
 # --- Globals ---
 IPCACHE = "/config/ip.cache.txt"
-VER = "3.5"
+VER = "3.5.1"
 USER_AGENT = f"dnsomatic-update.py/{VER}"
 
 # Setup logger
