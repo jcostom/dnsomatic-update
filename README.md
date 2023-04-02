@@ -1,5 +1,7 @@
 # dnsomatic-update
 
+**Please Note**: I'm not planning on updating this container any longer. Its functionality has been merged into another tool I built that handles DDNS updates for Cloudflare, DNS Made Easy, or DNS-O-Matic. You can find that one at [jcostom/ddnsup](https://github.com/jcostom/ddnsup).
+
 Lightweight DNS-o-Matic Updater in Python.
 
 Why build this? I was having problems with ddclient properly updating DNS-O-Matic, and wanted to rebuild it in Python and containerize the script.
